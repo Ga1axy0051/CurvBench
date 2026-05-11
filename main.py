@@ -43,6 +43,10 @@ BASELINE_MAP = {
     "graphsage": {
         "dir": "graphsage&pcnet_script",
         "script": "run_benchmark.py"
+    },
+    "cal_curv": {
+        "dir": "Cal_curv",
+        "script": "run_benchmark.py"
     }
 }
 

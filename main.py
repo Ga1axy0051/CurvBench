@@ -55,6 +55,10 @@ BASELINE_MAP = {
     "mdgpt": {
         "dir": "mdgpt",
         "script": "execute.py"
+    },
+    "samgpt": {
+        "dir": "SAMGPT/src",
+        "script": "execute.py"
     }
 }
 
@@ -115,8 +119,8 @@ def main():
             else:
                 command.extend(["--task", args.task])
                 
-        # Forward shot_num to baselines that might support it (mdgfm, gcope, mdgpt)
-        if args.model in ["gcope", "mdgfm", "mdgpt"]:
+        # Forward shot_num to baselines that might support it (mdgfm, gcope, mdgpt, samgpt)
+        if args.model in ["gcope", "mdgfm", "mdgpt", "samgpt"]:
             command.extend(["--shot_num", str(args.shot_num)])
             
         command.extend(unknown)

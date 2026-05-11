@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "${ROOT}/gcn"
+exec python train.py --task lp --dataset airport --model HyboNet --lr 0.01 --dim 16 --num-layers 2 --bias 1 --dropout 0.0 --weight-decay 0 --manifold Lorentz --log-freq 5 --cuda 0 --patience 500 --seed 1234

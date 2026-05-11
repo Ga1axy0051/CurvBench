@@ -1,0 +1,361 @@
+{
+  "schema": "cusp_experiment_config_v1",
+  "description": "Default CUSP training hyperparameters, Table2Graph paths, and baseline placeholders (this repo implements CUSP only).",
+  "experiment": {
+    "default_seeds": [0, 1, 2, 3, 4],
+    "recommended_cli": "python train.py --config config.json --dataset <NAME> --task node_classification --export_dir results/<NAME>_nc --seeds 0 1 2 3 4",
+    "metrics": {
+      "node_classification": ["accuracy", "f1_macro", "f1_micro", "f1_weighted"],
+      "link_prediction": ["auc", "ap"],
+      "efficiency": [
+        "total_train_loop_sec",
+        "avg_sec_per_epoch",
+        "total_test_eval_sec",
+        "total_train_step_sec",
+        "total_eval_during_train_sec"
+      ]
+    }
+  },
+  "cusp_architecture": {
+    "gnn_inner_activation": "ReLU",
+    "output": "Linear + log_softmax",
+    "propagation": "GPR / CuspGNN (see --ppnp, --K, --alpha, --Init)",
+    "notes": "Layer sizes follow manifold_config (e.g. H16H16S16E16) and filter count K."
+  },
+  "table2graph_datasets": {
+    "root_default": "data/exptable2graph",
+    "Carcinogenesis": {
+      "folder": "Carcinogenesis_data",
+      "files": {
+        "heterogeneous": "Carcinogenesis_HeteroGraph.pt",
+        "unified_homogeneous": "unified_data.pt"
+      },
+      "cusp_training": {
+        "epochs": 100,
+        "lr": 0.001,
+        "weight_decay": 0.0005,
+        "dropout": 0.5,
+        "dprate": 0.5,
+        "optimizer": "adam",
+        "K": 10,
+        "alpha": 0.1,
+        "Init": "PPR",
+        "manifold_config": "H16H16S16E16",
+        "d_f": 64,
+        "num_frequencies": 16
+      }
+    },
+    "Hockey": {
+      "folder": "Hockey_data",
+      "files": {
+        "heterogeneous": "Hockey_HeteroGraph.pt",
+        "unified_homogeneous": "unified_data.pt"
+      },
+      "cusp_training": {
+        "epochs": 100,
+        "lr": 0.001,
+        "weight_decay": 0.0005,
+        "dropout": 0.5,
+        "dprate": 0.5,
+        "optimizer": "adam",
+        "K": 10,
+        "alpha": 0.1,
+        "Init": "PPR",
+        "manifold_config": "H16H16S16E16",
+        "d_f": 64,
+        "num_frequencies": 16
+      }
+    },
+    "Hepatitis_std": {
+      "folder": "Hepatitis_std_data",
+      "files": {
+        "heterogeneous": "Hepatitis_std_HeteroGraph.pt",
+        "unified_homogeneous": "unified_data.pt"
+      },
+      "cusp_training": {
+        "epochs": 100,
+        "lr": 0.001,
+        "weight_decay": 0.0005,
+        "dropout": 0.5,
+        "dprate": 0.5,
+        "optimizer": "adam",
+        "K": 10,
+        "alpha": 0.1,
+        "Init": "PPR",
+        "manifold_config": "H16H16S16E16",
+        "d_f": 64,
+        "num_frequencies": 16
+      }
+    },
+    "Toxicology": {
+      "folder": "Toxicology_data",
+      "files": {
+        "heterogeneous": "Toxicology_HeteroGraph.pt",
+        "unified_homogeneous": "unified_data.pt"
+      },
+      "cusp_training": {
+        "epochs": 100,
+        "lr": 0.001,
+        "weight_decay": 0.0005,
+        "dropout": 0.5,
+        "dprate": 0.5,
+        "optimizer": "adam",
+        "K": 10,
+        "alpha": 0.1,
+        "Init": "PPR",
+        "manifold_config": "H16H16S16E16",
+        "d_f": 64,
+        "num_frequencies": 16
+      }
+    },
+    "PTE": {
+      "folder": "PTE",
+      "files": {
+        "heterogeneous": "PTE_HeteroGraph.pt",
+        "unified_homogeneous": "unified_data.pt"
+      },
+      "cusp_training": {
+        "epochs": 100,
+        "lr": 0.0001,
+        "weight_decay": 0.0005,
+        "dropout": 0.5,
+        "dprate": 0.5,
+        "optimizer": "adam",
+        "K": 10,
+        "alpha": 0.1,
+        "Init": "PPR",
+        "manifold_config": "H16H16S16E16",
+        "d_f": 64,
+        "num_frequencies": 16
+      }
+    },
+    "F1": {
+      "folder": "f1",
+      "files": {
+        "heterogeneous": "optional *_HeteroGraph.pt",
+        "unified_homogeneous": "unified_data.pt"
+      },
+      "cusp_training": {
+        "epochs": 100,
+        "lr": 0.001,
+        "weight_decay": 0.0005,
+        "dropout": 0.5,
+        "dprate": 0.5,
+        "optimizer": "adam",
+        "K": 10,
+        "alpha": 0.1,
+        "Init": "PPR",
+        "manifold_config": "H16H16S16E16",
+        "d_f": 64,
+        "num_frequencies": 16
+      }
+    }
+  },
+  "benchmark_datasets": {
+    "Cora": {
+      "cusp_training": {
+        "epochs": 100,
+        "lr": 0.001,
+        "weight_decay": 0.0005,
+        "dropout": 0.5,
+        "dprate": 0.5,
+        "optimizer": "adam",
+        "K": 10,
+        "alpha": 0.1,
+        "Init": "PPR",
+        "manifold_config": "H16H16S16E16",
+        "d_f": 64,
+        "num_frequencies": 16
+      }
+    },
+    "Citeseer": {
+      "cusp_training": {
+        "epochs": 100,
+        "lr": 0.001,
+        "weight_decay": 0.0005,
+        "dropout": 0.5,
+        "dprate": 0.5,
+        "optimizer": "adam",
+        "K": 10,
+        "alpha": 0.1,
+        "Init": "PPR",
+        "manifold_config": "H16H16S16E16",
+        "d_f": 64,
+        "num_frequencies": 16
+      }
+    },
+    "PubMed": {
+      "cusp_training": {
+        "epochs": 100,
+        "lr": 0.001,
+        "weight_decay": 0.0005,
+        "dropout": 0.5,
+        "dprate": 0.5,
+        "optimizer": "adam",
+        "K": 10,
+        "alpha": 0.1,
+        "Init": "PPR",
+        "manifold_config": "H16H16S16E16",
+        "d_f": 64,
+        "num_frequencies": 16
+      }
+    },
+    "Cornell": {
+      "cusp_training": {
+        "epochs": 100,
+        "lr": 0.001,
+        "weight_decay": 0.0005,
+        "dropout": 0.5,
+        "dprate": 0.5,
+        "optimizer": "adam",
+        "K": 10,
+        "alpha": 0.1,
+        "Init": "PPR",
+        "manifold_config": "H16H16S16E16",
+        "d_f": 64,
+        "num_frequencies": 16
+      }
+    },
+    "Actor": {
+      "cusp_training": {
+        "epochs": 100,
+        "lr": 0.001,
+        "weight_decay": 0.0005,
+        "dropout": 0.5,
+        "dprate": 0.5,
+        "optimizer": "adam",
+        "K": 10,
+        "alpha": 0.1,
+        "Init": "PPR",
+        "manifold_config": "H16H16S16E16",
+        "d_f": 64,
+        "num_frequencies": 16
+      }
+    },
+    "Disease": {
+      "cusp_training": {
+        "epochs": 100,
+        "lr": 0.001,
+        "weight_decay": 0.0005,
+        "dropout": 0.5,
+        "dprate": 0.5,
+        "optimizer": "adam",
+        "K": 10,
+        "alpha": 0.1,
+        "Init": "PPR",
+        "manifold_config": "H16H16S16E16",
+        "d_f": 64,
+        "num_frequencies": 16
+      }
+    },
+    "Telecom": {
+      "cusp_training": {
+        "epochs": 100,
+        "lr": 0.001,
+        "weight_decay": 0.0005,
+        "dropout": 0.5,
+        "dprate": 0.5,
+        "optimizer": "adam",
+        "K": 10,
+        "alpha": 0.1,
+        "Init": "PPR",
+        "manifold_config": "H16H16S16E16",
+        "d_f": 64,
+        "num_frequencies": 16
+      }
+    },
+    "cs_phds": {
+      "note": "Place under <data_root>/cs_phds/: NC in cs_phds_nc_ready (adj,dists,feats,labels); LP in cs_phds_lp_ready (adj_train,dists_train,feats) plus labels.pt or splits.pt (val/test pos/neg; see utils/cs_phds_dataset.py). Override root with --cs_phds_root.",
+      "cusp_training": {
+        "epochs": 100,
+        "lr": 0.001,
+        "weight_decay": 0.0005,
+        "dropout": 0.5,
+        "dprate": 0.5,
+        "optimizer": "adam",
+        "K": 10,
+        "alpha": 0.1,
+        "Init": "PPR",
+        "manifold_config": "H16H16S16E16",
+        "d_f": 64,
+        "num_frequencies": 16
+      }
+    },
+    "AirportLocal": {
+      "note": "Local airport GDP-bin labels; see utils/local_airport_dataset.py",
+      "cusp_training": {
+        "epochs": 100,
+        "lr": 0.001,
+        "weight_decay": 0.0005,
+        "dropout": 0.5,
+        "dprate": 0.5,
+        "optimizer": "adam",
+        "K": 10,
+        "alpha": 0.1,
+        "Init": "PPR",
+        "manifold_config": "H16H16S16E16",
+        "d_f": 64,
+        "num_frequencies": 16,
+        "gdp_bins": 10
+      }
+    }
+  },
+  "baselines_placeholder": {
+    "note": "Baseline hyperparameter stubs; fill when you add models. train.py currently supports --model cusp only.",
+    "GCN": {
+      "layers": 2,
+      "hidden_dim": 64,
+      "activation": "ReLU",
+      "dropout": 0.5,
+      "lr": 0.01,
+      "weight_decay": 0.0005,
+      "epochs": 200
+    },
+    "GAT": {
+      "layers": 2,
+      "heads": 8,
+      "hidden_dim": 8,
+      "activation": "ELU",
+      "dropout": 0.6,
+      "lr": 0.005,
+      "weight_decay": 0.0005,
+      "epochs": 200
+    },
+    "GraphSAGE": {
+      "layers": 2,
+      "hidden_dim": 64,
+      "aggregator": "mean",
+      "activation": "ReLU",
+      "lr": 0.01,
+      "weight_decay": 0.0005,
+      "epochs": 200
+    },
+    "APPNP": {
+      "layers": 2,
+      "hidden_dim": 64,
+      "alpha": 0.1,
+      "K": 10,
+      "activation": "ReLU",
+      "lr": 0.01,
+      "weight_decay": 0.0005,
+      "epochs": 200
+    },
+    "MLP": {
+      "layers": 2,
+      "hidden_dim": 64,
+      "activation": "ReLU",
+      "dropout": 0.5,
+      "lr": 0.01,
+      "weight_decay": 0.0005,
+      "epochs": 200
+    },
+    "Node2Vec": {
+      "embedding_dim": 128,
+      "walk_length": 20,
+      "context_size": 10,
+      "walks_per_node": 10,
+      "lr": 0.01,
+      "epochs": 100
+    }
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "seeds": [0, 1, 2, 3, 4],
+  "split_seed": 42,
+  "data_root": "data",
+  "exptable2graph_root": "",
+  "models_order": ["mlp", "gcn", "gat"],
+  "nc": {
+    "ce_class_weight": "none",
+    "optimizer": "adam",
+    "lr": 0.01,
+    "weight_decay": 0.0005,
+    "weight_decay_mlp": 0,
+    "hidden_dim": 64,
+    "gat": {
+      "hidden_dim_per_head": 8,
+      "num_heads_layer1": 8,
+      "num_heads_layer2": 1,
+      "dropout": 0.6,
+      "activation": "elu"
+    },
+    "gcn": {
+      "num_layers": 2,
+      "hidden_dim": 64,
+      "dropout": 0.5,
+      "activation": "relu"
+    },
+    "mlp": {
+      "num_layers": 2,
+      "hidden_dim": 64,
+      "dropout": 0.5,
+      "activation": "relu",
+      "uses_graph": false
+    },
+    "early_stopping": {
+      "max_epochs": 1000,
+      "patience": 100,
+      "min_delta": 0.0001
+    }
+  },
+  "lp": {
+    "emb_dim": 64,
+    "hidden_dim": 64,
+    "gat_hidden_dim_per_head": 8,
+    "gat_heads": 8,
+    "decoder": "inner_product",
+    "loss": "binary_cross_entropy_with_logits",
+    "random_link_split": {
+      "num_val": 0.05,
+      "num_test": 0.1,
+      "is_undirected": true,
+      "add_negative_train_samples": true,
+      "neg_sampling_ratio": 1.0
+    },
+    "optimizer": "adam",
+    "lr": 0.01,
+    "weight_decay": 0.0005,
+    "weight_decay_mlp": 0,
+    "dropout_gcn": 0.5,
+    "dropout_gat": 0.6,
+    "early_stopping": {
+      "max_epochs": 1000,
+      "patience": 100,
+      "min_delta": 0.0001
+    }
+  },
+  "datasets": {
+    "exptable2graph_keys": [
+      "carcinogenesis",
+      "hockey",
+      "hepatitis",
+      "pte",
+      "toxicology",
+      "f1"
+    ],
+    "base_benchmark": [
+      "cora",
+      "disease",
+      "citeseer",
+      "airport",
+      "cornell",
+      "actor",
+      "pubmed",
+      "telecom",
+      "cs_phds"
+    ]
+  }
+}

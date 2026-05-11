@@ -27,6 +27,7 @@ import torch.nn.functional as F
 #"Cornell", "Pubmed", "Cora", "Disease", "Citeseer", "Telecom", "Airport", "Actor"
 parser.add_argument('--dataset', type=str, default="cs_phds", help='data')
 parser.add_argument('--aug_type', type=str, default="edge", help='aug type: mask or edge')
+parser.add_argument('--shot_num', type=int, default=1)
 parser.add_argument('--drop_percent', type=float, default=0.1, help='drop percent')
 parser.add_argument('--seed', type=int, default=39, help='seed')
 parser.add_argument('--gpu', type=int, default=0, help='gpu')
@@ -558,7 +559,7 @@ for downstreamlr in downstreamlrlist:
     f1_macro_list = []
     print('-' * 100)
 
-    for shotnum in range(1,2):
+    for shotnum in range(args.shot_num, args.shot_num+1):
         tot = torch.zeros(1)
         tot = tot.cuda()
         accs = []

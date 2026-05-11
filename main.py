@@ -47,6 +47,14 @@ BASELINE_MAP = {
     "cal_curv": {
         "dir": "Cal_curv",
         "script": "run_benchmark.py"
+    },
+    "mdgfm": {
+        "dir": "mdgfm",
+        "script": "runexp.py"
+    },
+    "mdgpt": {
+        "dir": "mdgpt",
+        "script": "execute.py"
     }
 }
 
@@ -58,6 +66,8 @@ def main():
                         help="Task type: nc or lp (Passed to the baseline if supported)")
     parser.add_argument('--dataset', type=str, required=True, 
                         help="Dataset name to evaluate on")
+    parser.add_argument('--shot_num', type=int, required=False, default=1,
+                        help="Number of shots for few-shot learning baselines")
     
     # Accept any extra arguments to pass down to the baseline
     args, unknown = parser.parse_known_args()
@@ -104,6 +114,11 @@ def main():
                 command.extend(["--downstream_task", "LP"])
             else:
                 command.extend(["--task", args.task])
+                
+        # Forward shot_num to baselines that might support it (mdgfm, gcope, mdgpt)
+        if args.model in ["gcope", "mdgfm", "mdgpt"]:
+            command.extend(["--shot_num", str(args.shot_num)])
+            
         command.extend(unknown)
 
     # hgcn/qgcn/hybonet uses DATAPATH env variable

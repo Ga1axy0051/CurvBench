@@ -8,6 +8,7 @@ def main():
     parser.add_argument('--dataset', type=str, required=True)
     parser.add_argument('--task', type=str, default="nc")
     parser.add_argument('--data-root', type=str, default="")
+    parser.add_argument('--shot_num', type=int, default=1)
     args, unknown = parser.parse_known_args()
 
     # Pretrain GCOPE
@@ -33,7 +34,7 @@ def main():
         sys.executable, "src/exec.py",
         "--general.func", "adapt",
         "--general.save_dir", f"storage/gcn/few_shot",
-        "--general.few_shot", "1",
+        "--general.few_shot", str(args.shot_num),
         "--general.reconstruct", "0.0",
         "--data.node_feature_dim", "100", # Need this?
         "--data.name", args.dataset,

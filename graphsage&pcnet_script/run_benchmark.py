@@ -314,56 +314,56 @@ def main():
             data = load_parquet_as_pyg(dataset_name).to(CONFIG['device'])
         except Exception as e:
             print(f"❌ 读取失败: {e}")
+            continue
 
-                
-            run_metrics = []
+        run_metrics = []
+        
+        for run in range(CONFIG['num_runs']):
+            nc_res = run_node_classification(data, CONFIG, m_name)
+            lp_res = run_link_prediction(data, CONFIG, m_name)
             
-            for run in range(CONFIG['num_runs']):
-                nc_res = run_node_classification(data, CONFIG, m_name)
-                lp_res = run_link_prediction(data, CONFIG, m_name)
-                
-                nc_train = nc_res['train_time'] if nc_res else 0
-                nc_test = nc_res['test_time'] if nc_res else 0
-                lp_train = lp_res['train_time'] if lp_res else 0
-                lp_test = lp_res['test_time'] if lp_res else 0
-                
-                total_train_time = nc_train + lp_train
-                total_test_time = nc_test + lp_test
-                effective_epochs = (CONFIG['epochs'] if nc_res else 0) + (CONFIG['epochs'] if lp_res else 0)
-                train_time_per_epoch = total_train_time / effective_epochs if effective_epochs > 0 else 0
-                
-                run_metrics.append({
-                    "NC_Acc": nc_res['acc'] if nc_res else np.nan,
-                    "NC_MacroF1": nc_res['macro_f1'] if nc_res else np.nan,
-                    "NC_MicroF1": nc_res['micro_f1'] if nc_res else np.nan,
-                    "LP_AUC": lp_res['auc'] if lp_res else np.nan,
-                    "LP_AP": lp_res['ap'] if lp_res else np.nan,
-                    "Total_Train_Time": total_train_time,
-                    "Train_Time_Per_Epoch": train_time_per_epoch,
-                    "Total_Test_Time": total_test_time
-                })
-                
-                if run == 0 and nc_res:
-                    plt.figure(figsize=(10, 4))
-                    plt.subplot(1, 2, 1)
-                    plt.plot(nc_res['stats']['loss'], color='blue')
-                    plt.title(f"{dataset_name} Loss")
-                    plt.subplot(1, 2, 2)
-                    plt.plot(nc_res['stats']['acc'], color='green')
-                    plt.title(f"{dataset_name} Acc")
-                    plt.tight_layout()
-                    plt.savefig(model_exp_dir / f"{dataset_name}_convergence.png")
-                    plt.close()
+            nc_train = nc_res['train_time'] if nc_res else 0
+            nc_test = nc_res['test_time'] if nc_res else 0
+            lp_train = lp_res['train_time'] if lp_res else 0
+            lp_test = lp_res['test_time'] if lp_res else 0
+            
+            total_train_time = nc_train + lp_train
+            total_test_time = nc_test + lp_test
+            effective_epochs = (CONFIG['epochs'] if nc_res else 0) + (CONFIG['epochs'] if lp_res else 0)
+            train_time_per_epoch = total_train_time / effective_epochs if effective_epochs > 0 else 0
+            
+            run_metrics.append({
+                "NC_Acc": nc_res['acc'] if nc_res else np.nan,
+                "NC_MacroF1": nc_res['macro_f1'] if nc_res else np.nan,
+                "NC_MicroF1": nc_res['micro_f1'] if nc_res else np.nan,
+                "LP_AUC": lp_res['auc'] if lp_res else np.nan,
+                "LP_AP": lp_res['ap'] if lp_res else np.nan,
+                "Total_Train_Time": total_train_time,
+                "Train_Time_Per_Epoch": train_time_per_epoch,
+                "Total_Test_Time": total_test_time
+            })
+            
+            if run == 0 and nc_res:
+                plt.figure(figsize=(10, 4))
+                plt.subplot(1, 2, 1)
+                plt.plot(nc_res['stats']['loss'], color='blue')
+                plt.title(f"{dataset_name} Loss")
+                plt.subplot(1, 2, 2)
+                plt.plot(nc_res['stats']['acc'], color='green')
+                plt.title(f"{dataset_name} Acc")
+                plt.tight_layout()
+                plt.savefig(model_exp_dir / f"{dataset_name}_convergence.png")
+                plt.close()
 
-            df_run = pd.DataFrame(run_metrics)
-            summary = {"Dataset": dataset_name}
-            for col in df_run.columns:
-                summary[f"{col}_mean"] = df_run[col].mean(skipna=True)
-                summary[f"{col}_std"] = df_run[col].std(skipna=True)
+        df_run = pd.DataFrame(run_metrics)
+        summary = {"Dataset": dataset_name}
+        for col in df_run.columns:
+            summary[f"{col}_mean"] = df_run[col].mean(skipna=True)
+            summary[f"{col}_std"] = df_run[col].std(skipna=True)
             
-            results_table.append(summary)
-            save_intermediate_txt(dataset_name, summary, m_name, model_exp_dir)
-            print(f"  ✅ 完成! 数据集 {dataset_name} 的中间结果已存盘。")
+        results_table.append(summary)
+        save_intermediate_txt(dataset_name, summary, m_name, model_exp_dir)
+        print(f"  ✅ 完成! 数据集 {dataset_name} 的中间结果已存盘。")
 
         if results_table:
             pd.DataFrame(results_table).to_csv(model_exp_dir / f"Metrics_{m_name}.csv", index=False)

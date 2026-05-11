@@ -1,0 +1,32 @@
+name: curvbench
+channels:
+  - pytorch
+  - nvidia
+  - dglteam
+  - pyg
+  - defaults
+dependencies:
+  - python=3.9
+  - pytorch=2.1.2
+  - torchvision
+  - torchaudio
+  - pytorch-cuda=11.8
+  - pyg
+  - pytorch-sparse
+  - pytorch-scatter
+  - dgl
+  - pip
+  - pip:
+      - geoopt==0.5.0
+      - GraphRicciCurvature>=0.5.3
+      - networkx>=3.0
+      - scikit-learn
+      - numpy
+      - pandas
+      - tqdm
+      - fastargs
+      - terminaltables
+      - torchmetrics
+      - huggingface_hub
+      - transformers
+      - datasets

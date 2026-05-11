@@ -282,6 +282,19 @@ def save_intermediate_txt(dataset_name, summary, model_name, exp_dir):
 
 # ================= 5. 主控流程 =================
 def main():
+    
+    import sys; import os; sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+    try:
+        from parquet_loader import load_parquet_as_pyg
+    except Exception as e:
+        print(f'Error loading parquet_loader: {e}')
+
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--dataset', type=str, required=True)
+    parser.add_argument('--task', type=str, default='nc')
+    args, _ = parser.parse_known_args()
+
     with open(ROOT_EXP_DIR / "config.json", "w") as f:
         json.dump(CONFIG, f, indent=4)
 
@@ -294,19 +307,14 @@ def main():
         model_exp_dir.mkdir(parents=True, exist_ok=True)
         results_table = []
         
-        for folder in Path(CONFIG['data_root']).iterdir():
-            if not folder.is_dir(): continue
-            unified_pt = folder / "unified_data.pt"
-            if not unified_pt.exists(): continue
-            
-            dataset_name = folder.name
-            print(f"\n[{m_name}] >>>> 正在测试: {dataset_name} <<<<")
-            
-            try:
-                data = torch.load(unified_pt, weights_only=False).to(CONFIG['device'])
-            except Exception as e:
-                print(f"❌ 读取失败: {e}")
-                continue
+        
+        dataset_name = args.dataset
+        print(f"\\n[{m_name}] >>>> 正在测试: {dataset_name} <<<<")
+        try:
+            data = load_parquet_as_pyg(dataset_name).to(CONFIG['device'])
+        except Exception as e:
+            print(f"❌ 读取失败: {e}")
+
                 
             run_metrics = []
             

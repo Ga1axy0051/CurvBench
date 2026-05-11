@@ -5,6 +5,13 @@ from torch_geometric.datasets import Planetoid, WebKB, Amazon, WikipediaNetwork,
 from torch_geometric.data import Data
 from torch_geometric.utils import degree, add_self_loops
 from fastargs.decorators import param
+
+import sys; import os; sys.path.append("/data/hxz/WXY/CurvBench")
+try:
+    from parquet_loader import load_parquet_as_pyg
+except Exception as e:
+    print(f"Error loading parquet_loader: {e}")
+
 import math
 import torch.nn.functional as F
 from torch_geometric.utils import (
@@ -249,94 +256,19 @@ def x_svd(data, out_dim):
 
 @param('general.cache_dir')
 def iterate_datasets(data_names, cache_dir):
-    
     if isinstance(data_names, str):
         data_names = [data_names]
-    
     for data_name in data_names:
-        if data_name in ['cora', 'citeseer', 'pubmed']:
-            data = Planetoid(root=cache_dir, name=data_name.capitalize())._data
-        elif data_name in ['flickr']:
-            data=Flickr(root=cache_dir)._data
-        elif data_name in['reddit']:
-            data=Reddit(root=cache_dir)._data
-        elif data_name in ['wisconsin', 'texas', 'cornell']:
-            data = WebKB(root=cache_dir, name=data_name.capitalize())._data
-        elif data_name in ['computers', 'photo']:
-            data = Amazon(root=cache_dir, name=data_name.capitalize())._data
-        elif data_name in ['actor']:
-            data = Actor(root=cache_dir+'Actor')._data
-        elif data_name in ['telecom']:
-            data = TelecomDataset(root='/data/home/2022080136001/jhupload/data')[0]
-        elif data_name in ['airport']:
-            data = AirportDataset(root='/data/home/2022080136001/jhupload/data')[0]
-        elif data_name in ['disease']:  
-            data = DiseaseDataset(root='/data/home/2022080136001/jhupload/data')[0]
-        elif data_name in ['cs_phds']:
-            data = CSPhDsDataset(root='/data/home/2022080136001/jhupload')[0]
-        elif data_name in ['penn94']:
-            # print("wbkutils-49")
-            data = LINKXDataset(root=cache_dir,name='penn94')._data
-            # print("WBKdata.y utils-51",data.y[100:200])
-            data.y[data.y == -1] = 2
-        elif data_name in ['chameleon', 'squirrel']:
-            preProcDs = WikipediaNetwork(root=cache_dir, name=data_name.capitalize(), geom_gcn_preprocess=False)
-            data = WikipediaNetwork(root=cache_dir, name=data_name.capitalize(), geom_gcn_preprocess=True)._data
-            data.edge_index = preProcDs[0].edge_index
-        else:
-            raise ValueError(f'Unknown dataset: {data_name}')
-        
-        assert isinstance(data, (Data, dict)), f'Unknown data type: {type(data)}'
-
-        yield data if isinstance(data, Data) else Data(**data)
+        data = load_parquet_as_pyg(data_name)
+        yield data
 
 @param('general.cache_dir')
 def iterate_dataset_feature_tokens(data_names, cache_dir):
-    
     if isinstance(data_names, str):
         data_names = [data_names]
-    
     for data_name in data_names:
-        if data_name in ['cora', 'citeseer', 'pubmed']:
-            data = Planetoid(root=cache_dir, name=data_name.capitalize())._data
-            #if data_name=='cora':
-            #   data.adj = attack_adj('remove',0.1)
-            
-
-        elif data_name in ['flickr']:
-            data=Flickr(root=cache_dir, name=data_name.capitalize())._data
-        elif data_name in['reddit']:
-            data=Reddit(root=cache_dir, name=data_name.capitalize())._data
-        elif data_name in ['wisconsin', 'texas', 'cornell']:
-            data = WebKB(root=cache_dir, name=data_name.capitalize())._data
-        elif data_name in ['computers', 'photo']:
-            data = Amazon(root=cache_dir, name=data_name.capitalize())._data
-        elif data_name in ['actor']:
-            data = Actor(root=cache_dir+'Actor')._data
-        elif data_name in ['telecom']:
-            data = TelecomDataset(root='/data/home/2022080136001/jhupload/data')[0]
-        elif data_name in ['airport']:
-            data = AirportDataset(root='/data/home/2022080136001/jhupload/data')[0]
-        elif data_name in ['disease']:  
-            data = DiseaseDataset(root='/data/home/2022080136001/jhupload/data')[0]
-        elif data_name in ['cs_phds']:
-            data = CSPhDsDataset(root='/data/home/2022080136001/jhupload')[0]
-        elif data_name in ['chameleon', 'squirrel']:
-            preProcDs = WikipediaNetwork(root=cache_dir, name=data_name.capitalize(), geom_gcn_preprocess=False)
-            data = WikipediaNetwork(root=cache_dir, name=data_name.capitalize(), geom_gcn_preprocess=True)._data
-            data.edge_index = preProcDs[0].edge_index
-        elif data_name in ['penn94']:
-            #print("wbkutils-88")
-            data = LINKXDataset(root=cache_dir,name='penn94')._data
-           
-            
-            data.y[data.y == -1] = 2
-        else:
-            raise ValueError(f'Unknown dataset: {data_name}')
-        
-        assert isinstance(data, (Data, dict)), f'Unknown data type: {type(data)}'
-
-        yield data if isinstance(data, Data) else Data(**data)
+        data = load_parquet_as_pyg(data_name)
+        yield data
 
 # including projection operation, SVD
 @param('data.node_feature_dim')

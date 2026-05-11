@@ -1,3 +1,10 @@
+
+import sys; import os; sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+try:
+    from parquet_loader import load_parquet_as_pyg
+except Exception as e:
+    print(f"Error loading parquet_loader: {e}")
+
 import argparse
 import json
 import math
@@ -60,7 +67,7 @@ def _geoopt_stereographic_trainable_param_ids(model):
     return ids
 
 
-_DATASET_CHOICES = [
+_DATASET_CHOICES = ["cora", "citeseer", "pubmed", "chameleon", "actor", "squirrel", "texas", "cornell", "airportusa", "airportbrazil", "airporteurope", "airportlocal", "disease", "telecom", "cs_phds", "carcinogenesis", "hockey", "hepatitis_std", "toxicology", "pte", "f1",
     "Cora", "Citeseer", "PubMed", "Chameleon", "Actor", "Squirrel", "Texas", "Cornell",
     "AirportUSA", "AirportBrazil", "AirportEurope", "AirportLocal", "Disease", "Telecom", "cs_phds",
 ] + list(TABLE2GRAPH_NAMES)
@@ -187,53 +194,13 @@ def export_hparams_dict(args, data_root):
 
 
 def load_dataset_for_args(args, data_root, t2g_root):
-    """Load only ``args.dataset`` (avoid touching unrelated benchmarks)."""
-    dr = data_root
-    if args.dataset == "AirportLocal":
-        ar = args.airport_root or os.path.join(dr, "Airport")
-        return LocalAirportDataset(root=ar, gdp_bins=args.gdp_bins)
-    if args.dataset == "Disease":
-        disease_r = args.disease_root or os.path.join(dr, "disease")
-        return DiseaseDataset(root=disease_r)
-    if args.dataset == "Telecom":
-        tr = args.telecom_root or os.path.join(dr, "telecom")
-        return TelecomDataset(root=tr)
-    if args.dataset == "cs_phds":
-        cpr = args.cs_phds_root or os.path.join(dr, "cs_phds")
-        return CsPhdsDataset(
-            root=cpr,
-            task=args.task,
-            nc_subdir=args.cs_phds_nc_subdir or "cs_phds_nc_ready",
-            lp_subdir=args.cs_phds_lp_subdir or "cs_phds_lp_ready",
-            verbose=True,
-        )
-    if args.dataset in TABLE2GRAPH_NAMES:
-        return Table2GraphDataset(name=args.dataset, root=t2g_root)
-
-    if args.dataset == "Cora":
-        return Planetoid(root=os.path.join(dr, "Cora"), name="Cora", transform=T.ToUndirected())
-    if args.dataset == "Citeseer":
-        return Planetoid(root=os.path.join(dr, "Citeseer"), name="Citeseer", transform=T.ToUndirected())
-    if args.dataset == "PubMed":
-        return Planetoid(root=os.path.join(dr, "PubMed"), name="PubMed", transform=T.ToUndirected())
-    if args.dataset == "Chameleon":
-        return WikipediaNetwork(root=os.path.join(dr, "WikipediaNetwork"), name="chameleon", transform=T.ToUndirected())
-    if args.dataset == "Actor":
-        return Actor(root=os.path.join(dr, "Actor"), transform=T.ToUndirected())
-    if args.dataset == "Squirrel":
-        return WikipediaNetwork(root=os.path.join(dr, "WikipediaNetwork"), name="squirrel", transform=T.ToUndirected())
-    if args.dataset == "Texas":
-        return WebKB(root=dr, name="Texas", transform=T.ToUndirected())
-    if args.dataset == "Cornell":
-        return WebKB(root=dr, name="Cornell", transform=T.ToUndirected())
-    if args.dataset == "AirportUSA":
-        return Airports(root=os.path.join(dr, "airport"), name="usa", transform=T.ToUndirected())
-    if args.dataset == "AirportBrazil":
-        return Airports(root=os.path.join(dr, "airport"), name="brazil", transform=T.ToUndirected())
-    if args.dataset == "AirportEurope":
-        return Airports(root=os.path.join(dr, "airport"), name="europe", transform=T.ToUndirected())
-
-    raise ValueError("Unsupported dataset: %s" % args.dataset)
+    data = load_parquet_as_pyg(args.dataset)
+    import torch
+    class DummyDataset(list):
+        @property
+        def num_classes(self):
+            return int(torch.max(self[0].y).item()) + 1
+    return DummyDataset([data])
 
 
 def stratified_nc_split(data, seed, train_ratio=0.6):

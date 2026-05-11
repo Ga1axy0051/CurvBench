@@ -1318,7 +1318,7 @@ def load_cs_phds_lp(data_root: Path, split_seed: int) -> Tuple[Data, SimpleNames
     return data, meta
 
 
-def load_dataset(
+def original_load_dataset(
     dataset_name: str,
     data_root: Path,
     split_seed: int = 42,
@@ -1371,3 +1371,31 @@ def load_dataset(
         f"cs_phds (NC/LP via --task) "
         f"{list(EXP_TABLE2GRAPH_DIRS)}"
     )
+
+import pandas as pd
+import numpy as np
+def load_dataset(dataset_name: str, data_root: Path, split_seed: int = 42, exptable2graph_root: Optional[Path] = None, task: str = "nc") -> Tuple[Data, SimpleNamespace]:
+    # Custom Hook for HF Parquet in CurvBench
+    parquet_path = data_root / dataset_name / "unified_data.parquet"
+    if parquet_path.exists():
+        df = pd.read_parquet(parquet_path)
+        row = df.iloc[0]
+        x = torch.tensor(np.stack(row['x']).astype(np.float32))
+        edge_index = torch.tensor(np.stack(row['edge_index']).astype(np.int64))
+        y = torch.tensor(row['y'].astype(np.int64)) if 'y' in row else torch.zeros(x.size(0), dtype=torch.long)
+        data = Data(x=x, edge_index=edge_index, y=y)
+        for mask_name in ['train_mask', 'val_mask', 'test_mask']:
+            if mask_name in row:
+                setattr(data, mask_name, torch.tensor(row[mask_name].astype(bool)))
+        
+        # Build basic meta
+        num_classes = int(y.max().item() + 1) if y.numel() > 0 else 1
+        meta = SimpleNamespace(
+            num_features=int(x.size(1)),
+            num_classes=num_classes,
+            source="hf_parquet",
+        )
+        return data, meta
+    
+    # Fallback
+    return original_load_dataset(dataset_name, data_root, split_seed, exptable2graph_root, task)

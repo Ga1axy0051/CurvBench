@@ -208,7 +208,7 @@ def get_ready_dataset_spec(data_name: str):
     return READY_DATASET_SPECS.get(data_name.lower())
 
 
-def resolve_ready_dataset_root(root: str, data_name: str, task: str) -> str | None:
+def resolve_ready_dataset_root(root: str, data_name: str, task: str):
     spec = get_ready_dataset_spec(data_name)
     if spec is None:
         return None

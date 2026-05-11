@@ -164,8 +164,10 @@ def train(args):
         if not args.save_dir:
             dt = datetime.datetime.now()
             date = f"{dt.year}_{dt.month}_{dt.day}"
+            if 'LOG_DIR' not in os.environ:
+                os.environ['LOG_DIR'] = './logs'
             models_dir = os.path.join(os.environ['LOG_DIR'], args.task, date)
-            save_dir = get_dir_name(models_dir)
+            save_dir = get_dir_name(models_dir, args)
         else:
             save_dir = args.save_dir
         os.makedirs(save_dir, exist_ok=True)

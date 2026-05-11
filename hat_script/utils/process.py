@@ -116,9 +116,16 @@ def sample_mask(idx, l):
     """Create mask."""
     mask = np.zeros(l)
     mask[idx] = 1
-    return np.array(mask, dtype=np.bool)
+    return np.array(mask, dtype=bool)
+
 
 def load_data(dataset_str):  # {'pubmed', 'citeseer', 'cora'}
+    import sys
+    sys.path.append("/data/hxz/WXY/CurvBench")
+    from parquet_loader import _get_parquet_path, load_parquet_as_legacy_kipf
+    if os.path.exists(_get_parquet_path(dataset_str.lower())):
+        return load_parquet_as_legacy_kipf(dataset_str.lower())
+
     """Load data."""
     # my load data
     if dataset_str[:3] == 'my_':

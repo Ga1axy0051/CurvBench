@@ -194,7 +194,7 @@ def train(args):
             dt = datetime.datetime.now()
             date = f"{dt.year}_{dt.month}_{dt.day}"
             models_dir = os.path.join(os.environ['LOG_DIR'], args.task, date)
-            save_dir = get_dir_name(models_dir, args)
+            save_dir = get_dir_name(models_dir)
         else:
             save_dir = args.save_dir
         os.makedirs(save_dir, exist_ok=True)

@@ -732,7 +732,14 @@ def load_data_nc_md(dataset, use_feats, data_path, split_seed):
     return sp.csr_matrix(adj), features, labels,G
 
 
+
 def load_data_nc(dataset, use_feats, data_path, split_seed):
+    import os, sys
+    sys.path.append("/data/hxz/WXY/CurvBench")
+    from parquet_loader import _get_parquet_path, load_parquet_as_hgcn
+    if os.path.exists(_get_parquet_path(dataset.lower())):
+        return load_parquet_as_hgcn(dataset.lower())
+
     dataset_lower = dataset.lower()
     if dataset_lower in ['cora', 'pubmed', 'citeseer']:
         adj, features, labels, idx_train, idx_val, idx_test = load_citation_data(

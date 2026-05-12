@@ -30,7 +30,7 @@ def main():
     print(f"Using device: {device}")
     
     # Load dataset
-    print(f"Loading {dataset_name} using parquet_loader...")
+    print(f"Loading {dataset_name} using parquet_loader../...")
     data = load_parquet_as_pyg(dataset_name)
     if data is None:
         print(f"Error: Failed to load dataset {dataset_name}")
@@ -48,7 +48,7 @@ def main():
     # Compute pairwise Euclidean distance for geometry/curvature
     with torch.no_grad():
         try:
-            print("Computing pairwise distance matrix...")
+            print("Computing pairwise distance matrix../...")
             dists = torch.cdist(features, features)
         except RuntimeError as e:
             print(f"OOM error when computing distance matrix: {e}")
@@ -65,7 +65,7 @@ def main():
     save_dir = os.path.join("curvature_results", dataset_name, timestamp)
     os.makedirs(save_dir, exist_ok=True)
 
-    print(f"Starting sectional curvature calculation for {dataset_name}...\n")
+    print(f"Starting sectional curvature calculation for {dataset_name}../...\n")
     start_time = time.time()
 
     try:
@@ -80,7 +80,7 @@ def main():
         )
     except RuntimeError as e:
         if "CUDA" in str(e):
-            print("\nGPU OOM, switching to CPU...")
+            print("\nGPU OOM, switching to CPU../...")
             torch.cuda.empty_cache()
             adj = adj.cpu()
             dists = dists.cpu()

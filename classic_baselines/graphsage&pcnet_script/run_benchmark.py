@@ -283,7 +283,7 @@ def save_intermediate_txt(dataset_name, summary, model_name, exp_dir):
 # ================= 5. 主控流程 =================
 def main():
     
-    import sys; import os; sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+    import sys; import os; sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
     try:
         from parquet_loader import load_parquet_as_pyg
     except Exception as e:
@@ -293,7 +293,15 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--dataset', type=str, required=True)
     parser.add_argument('--task', type=str, default='nc')
+    parser.add_argument('--model', type=str, default='all')
     args, _ = parser.parse_known_args()
+
+    if args.model.lower() == 'graphsage':
+        MODELS_TO_RUN = ["GraphSAGE"]
+    elif args.model.lower() == 'pcnet':
+        MODELS_TO_RUN = ["PCNet"]
+    else:
+        MODELS_TO_RUN = ["GraphSAGE", "PCNet"]
 
     with open(ROOT_EXP_DIR / "config.json", "w") as f:
         json.dump(CONFIG, f, indent=4)

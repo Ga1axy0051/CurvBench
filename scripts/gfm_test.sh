@@ -15,7 +15,7 @@ for model in "${MODELS[@]}"; do
         for shot in "${SHOTS[@]}"; do
             echo "----------------------------------------"
             echo "Testing GFM: $model | Dataset: $dataset | Shots: $shot"
-            python main.py --model "$model" --dataset "$dataset" --task nc --shot_num "$shot" || echo "Failed $model on $dataset ($shot-shot)"
+            python ../main.py --model "$model" --dataset "$dataset" --task nc --shot_num "$shot" || echo "Failed $model on $dataset ($shot-shot)"
         done
     done
 done

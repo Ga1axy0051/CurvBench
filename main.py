@@ -9,56 +9,60 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # Map of baselines to their respective directories and main scripts
 BASELINE_MAP = {
     "mlp_gcn_gat": {
-        "dir": "mlp_gcn_gat_script",
+        "dir": "classic_baselines/mlp_gcn_gat_script",
         "script": "main.py"
     },
     "cusp": {
-        "dir": "cusp_script",
+        "dir": "classic_baselines/cusp_script",
         "script": "train.py"
     },
     "hat": {
-        "dir": "hat_script",
+        "dir": "classic_baselines/hat_script",
         "script": "hat_new.py"
     },
     "hgcn": {
-        "dir": "hnn_hgcn_script/hgcn",
+        "dir": "classic_baselines/hnn_hgcn_script/hgcn",
         "script": "train.py"
     },
     "hybonet": {
-        "dir": "hybonet_script/gcn",
+        "dir": "classic_baselines/hybonet_script/gcn",
         "script": "train.py"
     },
     "qgcn": {
-        "dir": "qgcn_script/QGCN-main",
+        "dir": "classic_baselines/qgcn_script/QGCN-main",
         "script": "train.py"
     },
     "graphmore": {
-        "dir": "graphmore_script/GraphMoRE-main",
+        "dir": "classic_baselines/graphmore_script/GraphMoRE-main",
         "script": "main.py"
     },
+    "graphsage": {
+        "dir": "classic_baselines/graphsage&pcnet_script",
+        "script": "run_benchmark.py"
+    },
+    "pcnet": {
+        "dir": "classic_baselines/graphsage&pcnet_script",
+        "script": "run_benchmark.py"
+    },
     "gcope": {
-        "dir": "GCOPE-main",
+        "dir": "gfm_baselines/GCOPE-main",
         "script": "run_benchmark.py"  
     },
-    "graphsage": {
-        "dir": "graphsage&pcnet_script",
-        "script": "run_benchmark.py"
+    "mdgfm": {
+        "dir": "gfm_baselines/mdgfm",
+        "script": "runexp.py"
+    },
+    "mdgpt": {
+        "dir": "gfm_baselines/mdgpt",
+        "script": "execute.py"
+    },
+    "samgpt": {
+        "dir": "gfm_baselines/SAMGPT/src",
+        "script": "execute.py"
     },
     "cal_curv": {
         "dir": "Cal_curv",
         "script": "run_benchmark.py"
-    },
-    "mdgfm": {
-        "dir": "mdgfm",
-        "script": "runexp.py"
-    },
-    "mdgpt": {
-        "dir": "mdgpt",
-        "script": "execute.py"
-    },
-    "samgpt": {
-        "dir": "SAMGPT/src",
-        "script": "execute.py"
     }
 }
 
@@ -106,6 +110,8 @@ def main():
             command.extend(["--data-root", data_root])
         elif args.model in ["cusp"]:
             command.extend(["--data_root", data_root])
+        elif args.model in ["graphsage", "pcnet"]:
+            command.extend(["--model", args.model])
             
         if args.task:
             if args.model == "cusp" and args.task == "nc":
@@ -135,7 +141,7 @@ def main():
     print("==================================================")
 
     # Execute the baseline in its respective directory so relative paths and configs work unmodified
-    os.environ['PYTHONPATH'] = target_dir + ":" + os.environ.get('PYTHONPATH', '')
+    os.environ['PYTHONPATH'] = target_dir + ":" + BASE_DIR + ":" + os.environ.get('PYTHONPATH', '')
     
     try:
         subprocess.run(command, cwd=target_dir, check=True)
@@ -148,3 +154,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

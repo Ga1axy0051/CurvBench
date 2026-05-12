@@ -1,0 +1,68 @@
+root: ./datasets
+seed: 42
+gpu: 0
+fold_name: curvature_fold4_pretrain
+
+source_datasets:
+  - Airport
+  - Cora
+  - CiteSeer
+  - Actor
+  - Disease
+
+target_datasets:
+  - PubMed
+  - Cornell
+
+task_type: node_cls
+metric: acc
+auto_prepare: true
+num_splits: 20
+num_val: 0.1
+no_swanlab: true
+
+community_method: louvain
+community_resolution: 1.0
+
+svd_dim: 32
+text_svd_dim: 32
+bert: bert-base-uncased
+bert_batch_size: 16
+max_neighbors_in_text: 48
+
+pretrain_hid_units: 256
+pretrain_out_channels: 64
+pretrain_num_layers: 2
+pretrain_dropout: 0.2
+pretrain_lr: 0.001
+pretrain_l2_coef: 0.0
+pretrain_nb_epochs: 3000
+pretrain_patience: 300
+pretrain_eval_steps: 50
+pretrain_neg_samples: 50
+pretrain_kl_weight: 0.0
+
+adapt_epochs: 100
+adapt_lr: 0.001
+unify_dim: 64
+hidden_dim: 64
+num_heads: 4
+head_dim: 16
+gamma: 5.0
+tau: 0.0
+lambda_var: 1.0
+alpha: 0.5
+gcn_layers: 2
+dropout: 0.5
+out_channels: 64
+hid_units: 256
+moe_weight: 0.1
+structure_weight: 0.1
+bucket_boundaries: [30, 100]
+inter_cluster_optimizer: true
+appnp_alpha: 0.1
+appnp_k: 10
+inter_cluster_threshold: 0.5
+inter_cluster_temperature: 10.0
+moe_embedding_weight: 0.1
+multi_embedding_weight: 0.9

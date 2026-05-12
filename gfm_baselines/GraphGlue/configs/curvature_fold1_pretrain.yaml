@@ -1,0 +1,74 @@
+# Shared data / loader
+root: ./datasets
+num_workers: 0
+seed: 42
+k_hops: 2
+num_neighbors: [10, 10]
+
+# Shared model
+n_layers: 2
+in_dim: 128
+hid_dim: 512
+att_dim: 512
+num_generators: 32
+conv_name: gcn
+act_str: relu
+normalize: false
+bias: true
+norm_str: layer_norm
+temperature: 1.0
+ema_alpha: 0.99
+geo_regular_coef: 0.1
+knn: 5
+
+# Optional Node2Vec fallback for datasets without features
+nv_dim: 64
+nv_batch_size: 128
+nv_walk_length: 20
+nv_context_size: 10
+nv_lr: 0.01
+nv_walks_per_node: 10
+nv_p: 1.0
+nv_q: 1.0
+nv_num_epochs: 100
+
+# Shared keys used by both pretrain and adapt
+# Set these only if you want the same value in both modes.
+# batch_size: 256
+# drop: 0.1
+max_grad_norm: 1.0
+resume_checkpoint: false
+
+# Pretrain
+pretrain_epochs: 5
+lr_pretrain: 0.0003
+pretrain_weight_decay: 0.0
+warmup_epochs: 1
+num_path_samples_global: 1200
+path_sample_times_global: 5
+num_path_samples_local: 120
+path_sample_times_local: 400
+log_interval: 100
+save_interval: 1
+
+# Adapt
+task_type: node_cls
+metric: acc
+num_trials: 3
+num_val: 0.1
+align_knn: 3
+align_samples: 200
+align_coef: 1.0
+lr_task: 0.001
+task_weight_decay: 0.0
+task_epochs: 200
+eval_interval: 20
+patience: 5
+
+pretrain_single_graph_data:
+  - Cora
+  - CiteSeer
+  - PubMed
+  - Disease
+  - Cornell
+pretrain_multi_graph_data: []

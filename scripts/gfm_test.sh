@@ -5,7 +5,7 @@ ENV_NAME="curvbench"
 source "$(conda info --base)/etc/profile.d/conda.sh" || { echo "Conda not found"; exit 1; }
 conda activate $ENV_NAME || { echo "Failed to activate $ENV_NAME"; exit 1; }
 
-MODELS=("gcope" "mdgfm" "mdgpt" "samgpt")
+MODELS=("gcope" "mdgfm" "mdgpt" "samgpt" "graphglue" "sa2gfm")
 DATASETS=("cora" "citeseer" "PubMed")
 SHOTS=(1 5)
 

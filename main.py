@@ -60,6 +60,14 @@ BASELINE_MAP = {
         "dir": "gfm_baselines/SAMGPT/src",
         "script": "execute.py"
     },
+    "graphglue": {
+        "dir": "gfm_baselines/GraphGlue",
+        "script": "main.py"
+    },
+    "sa2gfm": {
+        "dir": "gfm_baselines/SA2GFM",
+        "script": "main.py"
+    },
     "cal_curv": {
         "dir": "Cal_curv",
         "script": "run_benchmark.py"
@@ -102,9 +110,13 @@ def main():
     else:
         command = [
             sys.executable,  
-            target_script,
-            "--dataset", args.dataset
+            target_script
         ]
+        
+        if args.model in ["graphglue", "sa2gfm"]:
+            command.extend(["--run_type", "adapt", "--data_name", args.dataset])
+        else:
+            command.extend(["--dataset", args.dataset])
         
         if args.model in ["mlp_gcn_gat"]:
             command.extend(["--data-root", data_root])
@@ -125,9 +137,11 @@ def main():
             else:
                 command.extend(["--task", args.task])
                 
-        # Forward shot_num to baselines that might support it (mdgfm, gcope, mdgpt, samgpt)
+        # Forward shot_num to baselines that might support it (mdgfm, gcope, mdgpt, samgpt, graphglue, sa2gfm)
         if args.model in ["gcope", "mdgfm", "mdgpt", "samgpt"]:
             command.extend(["--shot_num", str(args.shot_num)])
+        elif args.model in ["graphglue", "sa2gfm"]:
+            command.extend(["--k_shot", str(args.shot_num)])
             
         command.extend(unknown)
 

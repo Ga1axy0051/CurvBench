@@ -22,7 +22,9 @@ CurvBench/
 │   ├── GCOPE-main/         # GCOPE (Pre-trained structure)
 │   ├── mdgfm/              # MDGFM
 │   ├── mdgpt/              # MDGPT
-│   └── SAMGPT/             # SAMGPT (Newly integrated)
+│   ├── SAMGPT/             # SAMGPT (Newly integrated)
+│   ├── GraphGlue/          # GraphGlue (Newly integrated)
+│   └── SA2GFM/             # SA2GFM (Newly integrated)
 ├── datasets/               # Unified mounted parquet format downstream datasets (downloaded from HF Hub).
 ├── scripts/                # Bash scripts for automated batch testing and evaluations.
 ├── main.py                 # The unified central dispatcher and entry point for all models.
@@ -59,11 +61,13 @@ python main.py --model hat --dataset citeseer
 python main.py --model gcope --dataset PubMed --shot_num 5
 python main.py --model mdgpt --dataset telecom --shot_num 1
 python main.py --model samgpt --dataset f1 --shot_num 1
+python main.py --model graphglue --dataset cora --shot_num 5
+python main.py --model sa2gfm --dataset citeseer --shot_num 1
 ```
 
 **Available model identifiers (`--model`) include:**
 - **Classical Baselines:** `mlp_gcn_gat`, `cusp`, `hat`, `hgcn`, `hybonet`, `qgcn`, `graphmore`, `graphsage`, `pcnet`
-- **Graph Foundation Models:** `gcope`, `mdgfm`, `mdgpt`, `samgpt`
+- **Graph Foundation Models:** `gcope`, `mdgfm`, `mdgpt`, `samgpt`, `graphglue`, `sa2gfm`
 - **Specialized Modules:** `cal_curv`
 
 ## ⚙️ Automated Benchmarking Scripts

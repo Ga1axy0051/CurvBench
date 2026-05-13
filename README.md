@@ -14,8 +14,8 @@ CurvBench/
 │   ├── graphmore_script/   # GraphMoRe
 │   ├── graphsage&pcnet_script/ # GraphSAGE and PCNet baselines
 │   ├── hat_script/         # HAT
-│   ├── hnn_hgcn_script/    # HGCN (Hyperbolic GCN)
-│   ├── hybonet_script/     # HyboNet (Hyperbolic GNN)
+│   ├── hnn_hgcn_script/    # Hyperbolic baselines: HNN and HGCN
+│   ├── hybonet_script/     # HyboNet
 │   ├── mlp_gcn_gat_script/ # Core classical baselines (MLP, GCN, GAT)
 │   └── qgcn_script/        # QGCN (Quantum-state GCN)
 ├── gfm_baselines/          # Graph Foundation Models (GFMs) and few-shot inference models.
@@ -66,7 +66,7 @@ python main.py --model sa2gfm --dataset citeseer --shot_num 1
 ```
 
 **Available model identifiers (`--model`) include:**
-- **Classical Baselines:** `mlp_gcn_gat`, `cusp`, `hat`, `hgcn`, `hybonet`, `qgcn`, `graphmore`, `graphsage`, `pcnet`
+- **Classical Baselines:** `mlp_gcn_gat`, `cusp`, `hat`, `hnn`, `hgcn`, `hybonet`, `qgcn`, `graphmore`, `graphsage`, `pcnet`
 - **Graph Foundation Models:** `gcope`, `mdgfm`, `mdgpt`, `samgpt`, `graphglue`, `sa2gfm`
 - **Specialized Modules:** `cal_curv`
 

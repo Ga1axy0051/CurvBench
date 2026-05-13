@@ -5,7 +5,7 @@ ENV_NAME="curvbench"
 source "$(conda info --base)/etc/profile.d/conda.sh" || { echo "Conda not found"; exit 1; }
 conda activate $ENV_NAME || { echo "Failed to activate $ENV_NAME"; exit 1; }
 
-MODELS=("mlp_gcn_gat" "cusp" "hat" "hgcn" "hybonet" "qgcn" "graphmore" "graphsage" "pcnet")
+MODELS=("mlp_gcn_gat" "cusp" "hat" "hnn" "hgcn" "hybonet" "qgcn" "graphmore" "graphsage" "pcnet")
 DATASETS=("Actor" "Airport" "Carcinogenesis_data" "citeseer" "cora" "cornell" "cs_phds_lp_ready" "cs_phds_nc_ready" "Disease" "f1" "Hepatitis_std_data" "PTE" "PubMed" "telecom" "Toxicology_data")
 
 echo "Running Classic Baselines (Full Mode)..."

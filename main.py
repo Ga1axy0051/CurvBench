@@ -20,6 +20,10 @@ BASELINE_MAP = {
         "dir": "classic_baselines/hat_script",
         "script": "hat_new.py"
     },
+    "hnn": {
+        "dir": "classic_baselines/hnn_hgcn_script/hgcn",
+        "script": "train.py"
+    },
     "hgcn": {
         "dir": "classic_baselines/hnn_hgcn_script/hgcn",
         "script": "train.py"
@@ -124,6 +128,8 @@ def main():
             command.extend(["--data_root", data_root])
         elif args.model in ["graphsage", "pcnet"]:
             command.extend(["--model", args.model])
+        elif args.model in ["hnn", "hgcn"]:
+            command.extend(["--model", args.model.upper()])
             
         if args.task:
             if args.model == "cusp" and args.task == "nc":
@@ -145,7 +151,7 @@ def main():
             
         command.extend(unknown)
 
-    # hgcn/qgcn/hybonet uses DATAPATH env variable
+    # hgcn/hnn/qgcn/hybonet uses DATAPATH env variable
     os.environ['DATAPATH'] = data_root
 
     print("==================================================")

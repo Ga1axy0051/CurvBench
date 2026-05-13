@@ -56,6 +56,13 @@ conda env create -f environment.yml
 # Activate the environment
 conda activate curvbench
 
+# Install HF CLI
+pip install -U "huggingface_hub[cli]"
+
+# Download datasets to the project root (using mirror)
+export HF_ENDPOINT=https://hf-mirror.com
+huggingface-cli download --repo-type dataset Ga1axy/CurvBench --local-dir datasets/
+
 # Calculate the sectional geometric curvature of a graph dataset
 python main.py --model cal_curv --dataset cora
 

@@ -46,6 +46,13 @@ A total of 15 standard graph datasets are integrated, classified by their underl
 The design pattern of this framework ensures that **all executions are routed through `main.py`**. You can evaluate any specific model (or a specific GFM) on any compatible dataset using a unified standard interface:
 
 ```bash
+# Clone the repository (if you haven't already)
+git clone git@github.com:Ga1axy0051/CurvBench.git
+cd CurvBench
+
+# Create the conda environment from the provided yaml file
+conda env create -f environment.yml
+
 # Activate the environment
 conda activate curvbench
 
